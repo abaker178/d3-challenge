@@ -52,6 +52,7 @@ body {
   fill: white;
   text-anchor: middle;
   font-size: x-small;
+  cursor: default;
 }
 
 .active {
