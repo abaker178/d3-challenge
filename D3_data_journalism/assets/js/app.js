@@ -45,5 +45,26 @@ d3.csv("./assets/data/data.csv").then(data => {
         d.smokesHigh = +d.smokesHigh;
     });
 
+    // Create Axes scales
+    var xScale = d3.scaleLinear()
+        .domain(d3.extent(data, d => d.poverty))
+        .range([0, width]);
+    var yScale = d3.scaleLinear()
+        .domain([0, d3.max(data, d => d.healthcare)])
+        .range([height, 0]);
+
+    // Create Axes
+    var xAxis = d3.axisBottom(xScale);
+    var yAxis = d3.axisLeft(yScale);
+
+    // Append Axes
+    chartGroup.append("g")
+        .attr("transform", `translate(0, ${height})`)
+        .call(xAxis);
+    
+    chartGroup.append("g")
+        .call(yAxis);
+
+    
 
 });
