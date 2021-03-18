@@ -23,9 +23,10 @@ var chartGroup = svg.append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 // Read in CSV
-d3.csv("./assets/data/data.csv").then(data => {
+d3.csv("./assets/data/data.csv").then((data, err) => {
+    if (err) throw err;
+    
     // Parse Data
-
     data.forEach(d => {
         d.id = +d.id;
         d.poverty = +d.poverty;
@@ -47,10 +48,10 @@ d3.csv("./assets/data/data.csv").then(data => {
 
     // Create Axes scales
     var xScale = d3.scaleLinear()
-        .domain(d3.extent(data, d => d.poverty))
+        .domain([d3.min(data, d => d.poverty)-1,d3.max(data, d => d.poverty)+1])
         .range([0, width]);
     var yScale = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d.healthcare)])
+        .domain([0, d3.max(data, d => d.healthcare)+2])
         .range([height, 0]);
 
     // Create Axes
@@ -65,6 +66,65 @@ d3.csv("./assets/data/data.csv").then(data => {
     chartGroup.append("g")
         .call(yAxis);
 
-    
+    // Append circles
+    var circlesGroup = chartGroup.selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", d => xScale(d.poverty))
+        .attr("cy", d => yScale(d.healthcare))
+        .attr("r", "10")
+        .classed("circle", true);
 
+    // Add state labels
+    var stateLabels = chartGroup.selectAll(null)
+        .data(data)
+        .enter()
+        .append("text")
+        .attr("x", d => xScale(d.poverty))
+        .attr("y", d => yScale(d.healthcare))
+        .attr("alignment-baseline", "central")
+        .classed("state_label", true)
+        .text(d => d.abbr);
+
+    // Create x-axis labels group
+    var xlabelsGroup = chartGroup.append("g")
+        .attr("transform", `translate(${width / 2}, ${height + 20})`);
+
+    var povertyLabel = xlabelsGroup.append("text")
+        .attr("x", 0)
+        .attr("y", 20)
+        .attr("value", "poverty") // value to grab for event listener
+        .classed("active", true)
+        .text("In Poverty (%)");
+
+    // Create y-axis labels group
+    var ylabelsGroup = chartGroup.append("g")
+        .attr("transform", `translate(0, ${height / 2})`)
+
+    var healthcareLabel = ylabelsGroup.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -40)
+        .attr("x", 0)
+        .classed("active", true)
+        .text("Lacks Healthcare (%)");
+    
+    // Create tooltips
+    var toolTip = d3.tip()
+        .attr("class", "tooltip")
+        .offset([80,60])
+        .html(d => `State: ${d.state}<br>Poverty: ${d.poverty}<br>Healthcare: ${d.healthcare}`);
+    
+    circlesGroup.call(toolTip);
+    circlesGroup
+        .on("mouseover", d => toolTip.show(d))
+        .on("mouseout", d => toolTip.hide(d));
+    stateLabels.call(toolTip);
+    stateLabels
+        .on("mouseover", d => toolTip.show(d))
+        .on("mouseout", d => toolTip.hide(d));
+
+
+}).catch(function(error) {
+    console.log(error);
 });
