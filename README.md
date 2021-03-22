@@ -10,4 +10,4 @@ The editor wants to run a series of feature stories about the health risks facin
 The data set included with the assignment is based on 2014 ACS 1-year estimates from the US Census Bureau, but you are free to investigate a different data set. The current data set includes data on rates of income, obesity, poverty, etc. by state.
 
 ## Timeline
-This project will be completed on or before March 24th and will likely not have many updates going forward.
+This project will likely not have many updates going forward.
