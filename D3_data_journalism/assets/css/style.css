@@ -49,7 +49,7 @@ body {
 }
 
 .state_label {
-  fill: white;
+  fill: black;
   text-anchor: middle;
   font-size: x-small;
   cursor: default;

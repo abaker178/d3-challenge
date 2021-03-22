@@ -103,7 +103,7 @@ function updateToolTips(stateLabels, activeAxisX, activeAxisY) {
         case "obesity":
             ylabel = "Obesity %";
             break;
-        case "smokes":
+        case "smoking":
             ylabel = "Smoking %";
             break;
         case "healthcare":
@@ -124,6 +124,14 @@ function updateToolTips(stateLabels, activeAxisX, activeAxisY) {
     
     return stateLabels;
 
+}
+
+// Function - updates the article header below the chart
+function updateArticle(xLabel, yLabel) {
+    d3.select("#x-label-ele").text(xLabel[0].toUpperCase() + xLabel.slice(1,));
+
+    yLabel === "smokes" ? yLabel = "smoking" : yLabel; // rename the "smokes" value so the title makes more sense
+    d3.select("#y-label-ele").text(yLabel[0].toUpperCase() + yLabel.slice(1,));
 }
 
 // Read in CSV
@@ -236,7 +244,7 @@ d3.csv("./assets/data/data.csv").then((data, err) => {
         .attr("value", "smokes")
         .classed("axis_label", true)
         .classed("active", false)
-        .text("Smokes (%)");
+        .text("Smoking (%)");
     
     var healthcareLabel = yLabelsGroup.append("text")
         .attr("transform", "rotate(-90)")
@@ -249,6 +257,7 @@ d3.csv("./assets/data/data.csv").then((data, err) => {
 
     // Initialize starter tooltips
     updateToolTips(stateLabels, activeAxisX, activeAxisY);
+    updateArticle(activeAxisX, activeAxisY);
 
     // Event listener for x-axis labels
     xLabelsGroup.selectAll("text")
@@ -267,6 +276,9 @@ d3.csv("./assets/data/data.csv").then((data, err) => {
                 ageLabel.classed("active", false);
                 incomeLabel.classed("active", false);
                 d3.select(this).classed("active", true);
+
+                // update the article header at the bottom of the chart
+                updateArticle(activeAxisX, activeAxisY);
             }
         });
 
@@ -287,6 +299,8 @@ d3.csv("./assets/data/data.csv").then((data, err) => {
                 healthcareLabel.classed("active", false);
                 d3.select(this).classed("active", true);
 
+                // update the article header at the bottom of the chart
+                updateArticle(activeAxisX, activeAxisY);
             }
         });
 
