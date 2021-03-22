@@ -58,19 +58,22 @@ body {
 .active {
   font-weight: bold;
   fill: #000;
-  fill: #551aaf;
-  transition: fill 0.3s ease-out;
-  text-anchor: middle;
+  cursor: default !important;
 }
 
-.inactive {
+.active:hover {
+  font-weight: bold;
+  fill: #000 !important;
+  cursor: default !important;
+}
+
+.axis_label {
   font-weight: lighter;
-  fill: #551aaf;
   transition: fill 0.3s ease-out;
   text-anchor: middle;
 }
 
-.inactive:hover {
-  fill: #e75480;
+.axis_label:hover {
+  fill: #5D99C7;
   cursor: pointer;
 }
